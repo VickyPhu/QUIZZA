@@ -2,15 +2,28 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 * {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-// background: rgb(255,250,194);
+  margin: 0 auto;
+  max-width: 980px;
+  background: linear-gradient(90deg, 
+  rgba(255,250,194,1) 0%, 
+  rgba(251,242,159,1) 30%, 
+  rgba(251,238,149,1) 60%, 
+  rgba(248,223,149,1) 100%
+);
+}
 
-background: linear-gradient(45deg, rgba(255,250,194,1) 5%, rgba(251,242,159,1) 25%, rgba(251,238,149,1) 50%, rgba(249,231,149,1) 75%, rgba(248,223,149,1) 100%);
+h1, h2 {
+   font-family: Fira Sans, Arial, Helvetica, sans-serif;
+}
+
+p {
+   font-family: Roboto, Arial, sans-serif;
 }
 `;
 
