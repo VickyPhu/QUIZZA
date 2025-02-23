@@ -24,6 +24,7 @@ h1, h2 {
 
 p {
    font-family: Roboto, Arial, sans-serif;
+   color: #310e6d;
 }
 `;
 

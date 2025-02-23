@@ -18,7 +18,7 @@ const Title = styled.h1`
 
 const InfoText = styled.p`
 text-align: center;
-color: #310e6d;
+padding-top: 1rem;
 /* color: #333; */
 `
 
