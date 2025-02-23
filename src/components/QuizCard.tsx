@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router";
 import styled from "styled-components";
 
 const CategoryName = styled.h2`
@@ -51,17 +52,20 @@ const DifficultyButtons = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  transition: 0.3s; //fungerar ej ?
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
 `;
 
-const Button = styled.button`
-  cursor: pointer;
+const Button = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding-block: 0.6rem;
   padding-inline: 1.5rem;
   border-radius: 0.5rem;
   background-color: #e8cbfd;
-  border: none;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  text-decoration: none;
   font-family: Roboto, Arial, sans-serif;
   font-size: 1rem;
   font-weight: 500;
@@ -73,36 +77,53 @@ const Button = styled.button`
   }
 `;
 
+const categories = [
+  {
+    id: 11,
+    name: "Film",
+    img: "/film.jpg",
+  },
+  {
+    id: 12,
+    name: "Music",
+    img: "/music.jpg",
+  },
+  {
+    id: 15,
+    name: "Video Games",
+    img: "/videogame.jpg",
+  },
+];
+
+const difficulties = ["Easy", "Medium", "Hard"];
+
 export default function QuizCard() {
-  const [isHovered, setIsHovered] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   return (
     <section>
       <CategoryName>Entertainment</CategoryName>
       <QuizCardGrid>
-        <QuizCardItem
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          <img src="/film.jpg" alt="" />
-          <p>Movies</p>
-          {/* Show the buttons at hover */}
-          {isHovered && (
-            <DifficultyButtons>
-              <Button>Easy</Button>
-              <Button>Medium</Button>
-              <Button>Hard</Button>
+        {categories.map((category) => (
+          <QuizCardItem
+            key={category.id}
+            onMouseEnter={() => setHoveredCard(category.id)}
+            onMouseLeave={() => setHoveredCard(null)}
+          >
+            <img src={category.img} alt={category.name} />
+            <p>{category.name}</p>
+            {/* Show the buttons at hover */}
+            <DifficultyButtons
+              style={{ opacity: hoveredCard === category.id ? 1 : 0 }}
+            >
+              {difficulties.map((difficulty) => (
+                <Button key={difficulty} to="/quiz">
+                  {difficulty}
+                </Button>
+              ))}
             </DifficultyButtons>
-          )}
-        </QuizCardItem>
-        <QuizCardItem>
-          <img src="/film.jpg" alt="" />
-          <p>Movies</p>
-        </QuizCardItem>
-        <QuizCardItem>
-          <img src="/film.jpg" alt="" />
-          <p>Movies</p>
-        </QuizCardItem>
+          </QuizCardItem>
+        ))}
       </QuizCardGrid>
     </section>
   );
