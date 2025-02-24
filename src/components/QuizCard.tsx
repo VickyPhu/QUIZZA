@@ -110,7 +110,7 @@ const categoryImages: CategoryImage[] = [
   { id: 32, img: "/images/cartoon.jpg" },
 ];
 
-const difficulties = ["Easy", "Medium", "Hard"];
+const difficulties = ["easy", "medium", "hard"];
 
 export default function QuizCard() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -145,7 +145,14 @@ export default function QuizCard() {
                 style={{ opacity: hoveredCard === category.id ? 1 : 0 }}
               >
                 {difficulties.map((difficulty) => (
-                  <Button key={difficulty} to="/quiz">
+                  <Button
+                    key={difficulty}
+                    to={`/quiz?categoryId=${
+                      category.id
+                    }&categoryName=${encodeURIComponent(
+                      category.name
+                    )}&difficulty=${difficulty}`}
+                  >
                     {difficulty}
                   </Button>
                 ))}
