@@ -5,25 +5,33 @@ import styled from "styled-components";
 import { triviaCategory } from "../api";
 
 const CategoryName = styled.h2`
-  padding-top: 3rem;
-  padding-bottom: 1rem;
+  padding: 3rem 2rem 1rem 2rem;
   color: #310e6d;
   font-size: 2rem;
+
+  @media (max-width: 460px) {
+    text-align: center;
+  }
 `;
 
 const QuizCardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
   max-width: 1000px;
-  margin: 0 auto;
+  padding-inline: 2rem;
+  justify-content: center;
+
+  @media (max-width: 460px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const QuizCardItem = styled.div`
   background-color: #e8cbfd;
   border-radius: 0.5rem;
-  max-width: 300px;
-  min-width: 250px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   position: relative;
@@ -33,7 +41,7 @@ const QuizCardItem = styled.div`
 
   p {
     padding: 0.5rem;
-    padding-bottom: 1rem;
+    padding-bottom: 0.7rem;
     font-size: 1.2rem;
     font-weight: 500;
     text-align: center;
