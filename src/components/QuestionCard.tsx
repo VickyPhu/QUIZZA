@@ -77,15 +77,6 @@ export default function QuestionCard() {
   const categoryName = query.get("categoryName");
   const difficulty = query.get("difficulty");
 
-  console.log(
-    "Category ID:",
-    categoryId,
-    "Category Name:",
-    categoryName,
-    "Difficulty:",
-    difficulty
-  );
-
   const [hasStarted, setHasStarted] = useState(false);
 
   const { data: results, isLoading } = useQuery({
