@@ -6,7 +6,7 @@ export async function TriviaData(categoryId: number, difficulty: string) {
     throw new Error("Failed to fetch trivia data");
   }
   const data = await response.json();
-  return data.questions;
+  return data.results;
 }
 
 // Fetch categories within Entertainment
