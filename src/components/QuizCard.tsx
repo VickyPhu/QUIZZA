@@ -1,6 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router";
 import styled from "styled-components";
+import { triviaCategory } from "../api";
 
 const CategoryName = styled.h2`
   padding-top: 3rem;
@@ -77,22 +79,27 @@ const Button = styled(Link)`
   }
 `;
 
-const categories = [
-  {
-    id: 11,
-    name: "Film",
-    img: "/film.jpg",
-  },
-  {
-    id: 12,
-    name: "Music",
-    img: "/music.jpg",
-  },
-  {
-    id: 15,
-    name: "Video Games",
-    img: "/videogame.jpg",
-  },
+interface Category {
+  id: number;
+  name: string;
+}
+
+interface CategoryImage {
+  id: number;
+  img: string;
+}
+
+const categoryImages: CategoryImage[] = [
+  { id: 10, img: "/images/books.jpg" },
+  { id: 11, img: "/images/film.jpg" },
+  { id: 12, img: "/images/music.jpg" },
+  { id: 13, img: "/images/theater.jpg" },
+  { id: 14, img: "/images/television.jpg" },
+  { id: 15, img: "/images/videogame.jpg" },
+  { id: 16, img: "/images/boardgame.jpg" },
+  { id: 29, img: "/images/comics.jpg" },
+  { id: 31, img: "/images/manga.jpg" },
+  { id: 32, img: "/images/cartoon.jpg" },
 ];
 
 const difficulties = ["Easy", "Medium", "Hard"];
@@ -100,30 +107,44 @@ const difficulties = ["Easy", "Medium", "Hard"];
 export default function QuizCard() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
+  const { data: categories = [], isLoading } = useQuery<Category[]>({
+    queryKey: ["categories"],
+    queryFn: triviaCategory,
+  });
+  if (isLoading) return <p>Loading categories...</p>;
+
   return (
     <section>
       <CategoryName>Entertainment</CategoryName>
       <QuizCardGrid>
-        {categories.map((category) => (
-          <QuizCardItem
-            key={category.id}
-            onMouseEnter={() => setHoveredCard(category.id)}
-            onMouseLeave={() => setHoveredCard(null)}
-          >
-            <img src={category.img} alt={category.name} />
-            <p>{category.name}</p>
-            {/* Show the buttons at hover */}
-            <DifficultyButtons
-              style={{ opacity: hoveredCard === category.id ? 1 : 0 }}
+        {categories.map((category) => {
+          const categoryImage = categoryImages.find(
+            (img) => img.id === category.id
+          );
+          return (
+            <QuizCardItem
+              key={category.id}
+              onMouseEnter={() => setHoveredCard(category.id)}
+              onMouseLeave={() => setHoveredCard(null)}
             >
-              {difficulties.map((difficulty) => (
-                <Button key={difficulty} to="/quiz">
-                  {difficulty}
-                </Button>
-              ))}
-            </DifficultyButtons>
-          </QuizCardItem>
-        ))}
+              <img
+                src={categoryImage?.img || "/images/default.jpg"}
+                alt={category.name}
+              />
+              <p>{category.name}</p>
+              {/* Show the buttons at hover */}
+              <DifficultyButtons
+                style={{ opacity: hoveredCard === category.id ? 1 : 0 }}
+              >
+                {difficulties.map((difficulty) => (
+                  <Button key={difficulty} to="/quiz">
+                    {difficulty}
+                  </Button>
+                ))}
+              </DifficultyButtons>
+            </QuizCardItem>
+          );
+        })}
       </QuizCardGrid>
     </section>
   );
