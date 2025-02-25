@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLocation } from "react-router";
 import styled from "styled-components";
 import { TriviaData } from "../api";
+import Quiz from "./Quiz";
 
 const Container = styled.section`
   padding: 4rem 2rem;
@@ -85,42 +86,6 @@ export default function QuestionCard() {
     enabled: hasStarted,
   });
 
-  if (!hasStarted) {
-    return (
-      <Container>
-        <QuestionContainer>
-          <InfoText>
-            <p>
-              {categoryName}:{" "}
-              {difficulty
-                ? difficulty?.charAt(0).toUpperCase() + difficulty.slice(1)
-                : ""}
-            </p>
-            <p>Question number</p>
-            <p>Score:</p>
-            <Line></Line>
-          </InfoText>
-          {!hasStarted && (
-            <StartButton onClick={() => setHasStarted(true)}>
-              Start Quiz
-            </StartButton>
-          )}
-        </QuestionContainer>
-      </Container>
-    );
-  }
-
-  if (isLoading) return <p>Loading questions...</p>;
-
-  if (!results || results.length === 0) return <p>No questions found...</p>;
-
-  const currentQuestion = results[0];
-
-  const shuffledAnswers: string[] = [
-    ...currentQuestion.incorrect_answers,
-    currentQuestion.correct_answer,
-  ].sort(() => Math.random() - 0.5);
-
   return (
     <Container>
       <QuestionContainer>
@@ -135,14 +100,15 @@ export default function QuestionCard() {
           <p>Score:</p>
           <Line></Line>
         </InfoText>
-        <div>
-          <p>{currentQuestion.question}</p>
-          <div>
-            {shuffledAnswers.map((answer: string, index: number) => (
-              <button key={index}>{answer}</button>
-            ))}
-          </div>
-        </div>
+        {!hasStarted ? (
+          <StartButton onClick={() => setHasStarted(true)}>
+            Start Quiz
+          </StartButton>
+        ) : isLoading ? (
+          <p>Loading questions...</p>
+        ) : (
+          <Quiz questions={results || []} />
+        )}
       </QuestionContainer>
     </Container>
   );
