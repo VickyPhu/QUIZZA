@@ -56,12 +56,12 @@ const QuizCardItem = styled.div`
 
 const DifficultyButtons = styled.div`
   position: absolute;
-  top: 42%;
+  top: 38%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.5rem;
   opacity: 1;
   transition: opacity 0.3s ease-in-out;
 `;
@@ -70,8 +70,8 @@ const Button = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-block: 0.6rem;
-  padding-inline: 1.5rem;
+  padding-block: 0.4rem;
+  padding-inline: 1rem;
   border-radius: 0.5rem;
   background-color: #e8cbfd;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -153,7 +153,10 @@ export default function QuizCard() {
                       category.name
                     )}&difficulty=${difficulty}`}
                   >
-                    {difficulty}
+                    {difficulty
+                      ? difficulty?.charAt(0).toUpperCase() +
+                        difficulty.slice(1)
+                      : ""}
                   </Button>
                 ))}
               </DifficultyButtons>
