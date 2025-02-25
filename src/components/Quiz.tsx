@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 const QuestionText = styled.p`
-display: flex;
-justify-content: center;
-align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 1.3rem;
   padding-bottom: 1.5rem;
 `;
@@ -28,12 +28,12 @@ const AnswerButtons = styled.button`
 `;
 
 const ButtonContainer = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-flex-wrap: wrap;
-gap: 1.5rem;
-`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+`;
 
 interface Props {
   questions: {
@@ -41,6 +41,12 @@ interface Props {
     correct_answer: string;
     incorrect_answers: string[];
   }[];
+}
+
+function decodeHtml(html: string): string {
+  const text = document.createElement("textarea");
+  text.innerHTML = html;
+  return text.value;
 }
 
 export default function Quiz({ questions }: Props) {
@@ -53,10 +59,10 @@ export default function Quiz({ questions }: Props) {
 
   return (
     <div>
-      <QuestionText>{currentQuestion.question}</QuestionText>
+      <QuestionText>{decodeHtml(currentQuestion.question)}</QuestionText>
       <ButtonContainer>
         {shuffledAnswers.map((answer: string, index: number) => (
-          <AnswerButtons key={index}>{answer}</AnswerButtons>
+          <AnswerButtons key={index}>{decodeHtml(answer)}</AnswerButtons>
         ))}
       </ButtonContainer>
     </div>
