@@ -49,7 +49,7 @@ function decodeHtml(html: string): string {
   return text.value;
 }
 
-export default function Quiz({ questions }: Props) {
+export default function Question({ questions }: Props) {
   const currentQuestion = questions[0];
 
   const shuffledAnswers: string[] = [

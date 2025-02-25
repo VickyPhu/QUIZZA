@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useLocation } from "react-router";
 import styled from "styled-components";
 import { TriviaData } from "../api";
-import Quiz from "./Quiz";
+import Quiz from "./Question";
 
 const Container = styled.section`
   padding: 4rem 2rem;
