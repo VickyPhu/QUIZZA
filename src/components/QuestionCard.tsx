@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
 import { TriviaData } from "../api";
 import Question from "./Question";
+import QuestionHeader from "./QuestionHeader";
 import StartQuizScreen from "./StartQuizScreen";
 
 const Container = styled.section`
@@ -18,36 +19,6 @@ const QuestionContainer = styled.div`
   background-color: #f5f5f5;
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
-
-const InfoText = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  width: 100%;
-
-  p {
-    font-size: 1.2rem;
-  }
-
-  p:nth-child(1) {
-    text-align: left;
-  }
-
-  p:nth-child(2) {
-    text-align: center;
-  }
-
-  p:nth-child(3) {
-    text-align: right;
-  }
-`;
-
-const Line = styled.div`
-  background-color: #310e6d;
-  margin: 0.5rem 0rem 2rem 0rem;
-  width: 300%;
-  height: 3px;
-  border-radius: 3px;
 `;
 
 function useQueryParams() {
@@ -124,19 +95,13 @@ export default function QuestionCard() {
   return (
     <Container>
       <QuestionContainer>
-        <InfoText>
-          <p>
-            {categoryName}:{" "}
-            {difficulty
-              ? difficulty?.charAt(0).toUpperCase() + difficulty.slice(1)
-              : ""}
-          </p>
-          <p>
-            {currentQuestionIndex + 1} / {results.length}
-          </p>
-          <p>Score: {score}</p>
-          <Line />
-        </InfoText>
+        <QuestionHeader
+          categoryName={categoryName}
+          difficulty={difficulty}
+          currentQuestionIndex={currentQuestionIndex}
+          totalQuestions={results.length}
+          score={score}
+        />
         {currentQuestionIndex < results.length && (
           <Question
             questionData={results[currentQuestionIndex]}
