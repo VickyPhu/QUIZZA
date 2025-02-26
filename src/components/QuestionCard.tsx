@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { useLocation } from "react-router";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
 import { TriviaData } from "../api";
 import Question from "./Question";
@@ -72,6 +72,24 @@ export default function QuestionCard() {
     enabled: hasStarted,
   });
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (results && currentQuestionIndex >= results.length) {
+      navigate("/results", {
+        state: { score, categoryId, categoryName, difficulty },
+      });
+    }
+  }, [
+    currentQuestionIndex,
+    results,
+    score,
+    categoryId,
+    categoryName,
+    difficulty,
+    navigate,
+  ]);
+
   if (!hasStarted) {
     return (
       <StartQuizScreen
@@ -93,7 +111,7 @@ export default function QuestionCard() {
     setIsCorrect(correct);
 
     if (correct) {
-      setScore((prev) => prev + 10);
+      setScore((prev) => prev + 1);
     }
 
     setTimeout(() => {
@@ -119,15 +137,13 @@ export default function QuestionCard() {
           <p>Score: {score}</p>
           <Line />
         </InfoText>
-        {currentQuestionIndex < results.length ? (
+        {currentQuestionIndex < results.length && (
           <Question
             questionData={results[currentQuestionIndex]}
             handleAnswer={handleAnswer}
             selectedAnswer={selectedAnswer}
             isCorrect={isCorrect}
           />
-        ) : (
-          <p>Quiz Completed! Final Score: {score}</p>
         )}
       </QuestionContainer>
     </Container>
