@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useState } from "react";
+import { useLocation } from "react-router";
 import styled from "styled-components";
+import { useNavigateOnComplete } from "../hooks/useNavigateOnComplete";
 import useQuizData from "../hooks/useQuizData";
+import { useQuizLogic } from "../hooks/useQuizLogic";
 import Question from "./Question";
 import QuestionHeader from "./QuestionHeader";
 import StartQuizScreen from "./StartQuizScreen";
@@ -31,34 +33,26 @@ export default function QuestionCard() {
   const difficulty = query.get("difficulty");
 
   const [hasStarted, setHasStarted] = useState(false);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const [score, setScore] = useState(0);
-
   const { data: results, isLoading } = useQuizData(
     categoryId,
     difficulty || "medium",
     hasStarted
   );
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (results && currentQuestionIndex >= results.length) {
-      navigate("/results", {
-        state: { score, categoryId, categoryName, difficulty },
-      });
-    }
-  }, [
+  const {
+    currentQuestionIndex,
+    selectedAnswer,
+    isCorrect,
+    score,
+    handleAnswer,
+  } = useQuizLogic();
+  useNavigateOnComplete(
     currentQuestionIndex,
     results,
     score,
     categoryId,
     categoryName,
-    difficulty,
-    navigate,
-  ]);
+    difficulty
+  );
 
   if (!hasStarted) {
     return (
@@ -73,24 +67,6 @@ export default function QuestionCard() {
   if (isLoading) return <p>Loading questions...</p>;
   if (!results || results.length === 0) return <p>No Questions found</p>;
 
-  const handleAnswer = (answer: string) => {
-    if (selectedAnswer) return;
-
-    setSelectedAnswer(answer);
-    const correct = answer === results[currentQuestionIndex].correct_answer;
-    setIsCorrect(correct);
-
-    if (correct) {
-      setScore((prev) => prev + 1);
-    }
-
-    setTimeout(() => {
-      setSelectedAnswer(null);
-      setIsCorrect(null);
-      setCurrentQuestionIndex((prev) => prev + 1);
-    }, 1000);
-  };
-
   return (
     <Container>
       <QuestionContainer>
@@ -104,7 +80,9 @@ export default function QuestionCard() {
         {currentQuestionIndex < results.length && (
           <Question
             questionData={results[currentQuestionIndex]}
-            handleAnswer={handleAnswer}
+            handleAnswer={(answer) =>
+              handleAnswer(answer, results[currentQuestionIndex].correct_answer)
+            }
             selectedAnswer={selectedAnswer}
             isCorrect={isCorrect}
           />
