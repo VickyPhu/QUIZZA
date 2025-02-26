@@ -36,11 +36,14 @@ const ButtonContainer = styled.div`
 `;
 
 interface Props {
-  questions: {
+  questionData: {
     question: string;
     correct_answer: string;
     incorrect_answers: string[];
-  }[];
+  };
+  handleAnswer: (answer: string) => void;
+  selectedAnswer: string | null;
+  isCorrect: boolean | null;
 }
 
 function decodeHtml(html: string): string {
@@ -49,20 +52,37 @@ function decodeHtml(html: string): string {
   return text.value;
 }
 
-export default function Question({ questions }: Props) {
-  const currentQuestion = questions[0];
-
+export default function Question({
+  questionData,
+  handleAnswer,
+  selectedAnswer,
+  isCorrect,
+}: Props) {
   const shuffledAnswers: string[] = [
-    ...currentQuestion.incorrect_answers,
-    currentQuestion.correct_answer,
+    ...questionData.incorrect_answers,
+    questionData.correct_answer,
   ].sort(() => Math.random() - 0.5);
 
   return (
     <div>
-      <QuestionText>{decodeHtml(currentQuestion.question)}</QuestionText>
+      <QuestionText>{decodeHtml(questionData.question)}</QuestionText>
       <ButtonContainer>
         {shuffledAnswers.map((answer: string, index: number) => (
-          <AnswerButtons key={index}>{decodeHtml(answer)}</AnswerButtons>
+          <AnswerButtons
+            key={index}
+            onClick={() => handleAnswer(answer)}
+            disabled={selectedAnswer !== null}
+            style={{
+              backgroundColor:
+                selectedAnswer === answer
+                  ? isCorrect
+                    ? "#7DFC86"
+                    : "#FF7878"
+                  : "#e8cbfd",
+            }}
+          >
+            {decodeHtml(answer)}
+          </AnswerButtons>
         ))}
       </ButtonContainer>
     </div>

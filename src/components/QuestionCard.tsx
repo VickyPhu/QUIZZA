@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLocation } from "react-router";
 import styled from "styled-components";
 import { TriviaData } from "../api";
+import Question from "./Question";
 import StartQuizScreen from "./StartQuizScreen";
 
 const Container = styled.section`
@@ -49,25 +50,6 @@ const Line = styled.div`
   border-radius: 3px;
 `;
 
-const StartButton = styled.button`
-  border: none;
-  padding-block: 0.6rem;
-  padding-inline: 1.5rem;
-  border-radius: 0.5rem;
-  background-color: #e8cbfd;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #310e6d;
-  cursor: pointer;
-  transition: 0.2s;
-  &:hover {
-    transform: scale(1.1);
-    background-color: #daa6ff;
-  }
-`;
-
 function useQueryParams() {
   return new URLSearchParams(useLocation().search);
 }
@@ -79,6 +61,9 @@ export default function QuestionCard() {
   const difficulty = query.get("difficulty");
 
   const [hasStarted, setHasStarted] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
   const { data: results, isLoading } = useQuery({
     queryKey: ["quiz", categoryId, difficulty],
@@ -86,7 +71,7 @@ export default function QuestionCard() {
     enabled: hasStarted,
   });
 
-  if (hasStarted) {
+  if (!hasStarted) {
     return (
       <StartQuizScreen
         categoryName={categoryName}
@@ -95,32 +80,49 @@ export default function QuestionCard() {
       />
     );
   }
-}
 
-//   return (
-//     <Container>
-//       <QuestionContainer>
-//         <InfoText>
-//           <p>
-//             {categoryName}:{" "}
-//             {difficulty
-//               ? difficulty?.charAt(0).toUpperCase() + difficulty.slice(1)
-//               : ""}
-//           </p>
-//           <p>Question number</p>
-//           <p>Score:</p>
-//           <Line></Line>
-//         </InfoText>
-//         {!hasStarted ? (
-//           <StartButton onClick={() => setHasStarted(true)}>
-//             Start Quiz
-//           </StartButton>
-//         ) : isLoading ? (
-//           <p>Loading questions...</p>
-//         ) : (
-//           <Question questions={results || []} />
-//         )}
-//       </QuestionContainer>
-//     </Container>
-//   );
-// }
+  if (isLoading) return <p>Loading questions...</p>;
+  if (!results || results.length === 0) return <p>No Questions found</p>;
+
+  const handleAnswer = (answer: string) => {
+    if (selectedAnswer) return;
+
+    setSelectedAnswer(answer);
+    const correct = answer === results[currentQuestionIndex].correct_answer;
+    setIsCorrect(correct);
+
+    setTimeout(() => {
+      setSelectedAnswer(null);
+      setIsCorrect(null);
+      setCurrentQuestionIndex((prev) => prev + 1);
+    }, 2000);
+  };
+
+  return (
+    <Container>
+      <QuestionContainer>
+        <InfoText>
+          <p>
+            {categoryName}:{" "}
+            {difficulty
+              ? difficulty?.charAt(0).toUpperCase() + difficulty.slice(1)
+              : ""}
+          </p>
+          <p>Question number</p>
+          <p>Score:</p>
+          <Line />
+        </InfoText>
+        {currentQuestionIndex < results.length ? (
+          <Question
+            questionData={results[currentQuestionIndex]}
+            handleAnswer={handleAnswer}
+            selectedAnswer={selectedAnswer}
+            isCorrect={isCorrect}
+          />
+        ) : (
+          <p>Quiz Completed! Final Score:</p>
+        )}
+      </QuestionContainer>
+    </Container>
+  );
+}
