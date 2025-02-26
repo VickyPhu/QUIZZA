@@ -64,6 +64,7 @@ export default function QuestionCard() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [score, setScore] = useState(0);
 
   const { data: results, isLoading } = useQuery({
     queryKey: ["quiz", categoryId, difficulty],
@@ -91,6 +92,10 @@ export default function QuestionCard() {
     const correct = answer === results[currentQuestionIndex].correct_answer;
     setIsCorrect(correct);
 
+    if (correct) {
+      setScore((prev) => prev + 10);
+    }
+
     setTimeout(() => {
       setSelectedAnswer(null);
       setIsCorrect(null);
@@ -109,7 +114,7 @@ export default function QuestionCard() {
               : ""}
           </p>
           <p>Question number</p>
-          <p>Score:</p>
+          <p>Score: {score}</p>
           <Line />
         </InfoText>
         {currentQuestionIndex < results.length ? (
@@ -120,7 +125,7 @@ export default function QuestionCard() {
             isCorrect={isCorrect}
           />
         ) : (
-          <p>Quiz Completed! Final Score:</p>
+          <p>Quiz Completed! Final Score: {score}</p>
         )}
       </QuestionContainer>
     </Container>
