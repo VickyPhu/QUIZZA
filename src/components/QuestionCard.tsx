@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useLocation } from "react-router";
 import styled from "styled-components";
 import { TriviaData } from "../api";
-import Quiz from "./Question";
+import StartQuizScreen from "./StartQuizScreen";
 
 const Container = styled.section`
   padding: 4rem 2rem;
@@ -86,30 +86,41 @@ export default function QuestionCard() {
     enabled: hasStarted,
   });
 
-  return (
-    <Container>
-      <QuestionContainer>
-        <InfoText>
-          <p>
-            {categoryName}:{" "}
-            {difficulty
-              ? difficulty?.charAt(0).toUpperCase() + difficulty.slice(1)
-              : ""}
-          </p>
-          <p>Question number</p>
-          <p>Score:</p>
-          <Line></Line>
-        </InfoText>
-        {!hasStarted ? (
-          <StartButton onClick={() => setHasStarted(true)}>
-            Start Quiz
-          </StartButton>
-        ) : isLoading ? (
-          <p>Loading questions...</p>
-        ) : (
-          <Quiz questions={results || []} />
-        )}
-      </QuestionContainer>
-    </Container>
-  );
+  if (hasStarted) {
+    return (
+      <StartQuizScreen
+        categoryName={categoryName}
+        difficulty={difficulty}
+        onStart={() => setHasStarted(true)}
+      />
+    );
+  }
 }
+
+//   return (
+//     <Container>
+//       <QuestionContainer>
+//         <InfoText>
+//           <p>
+//             {categoryName}:{" "}
+//             {difficulty
+//               ? difficulty?.charAt(0).toUpperCase() + difficulty.slice(1)
+//               : ""}
+//           </p>
+//           <p>Question number</p>
+//           <p>Score:</p>
+//           <Line></Line>
+//         </InfoText>
+//         {!hasStarted ? (
+//           <StartButton onClick={() => setHasStarted(true)}>
+//             Start Quiz
+//           </StartButton>
+//         ) : isLoading ? (
+//           <p>Loading questions...</p>
+//         ) : (
+//           <Question questions={results || []} />
+//         )}
+//       </QuestionContainer>
+//     </Container>
+//   );
+// }
