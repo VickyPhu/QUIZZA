@@ -100,7 +100,7 @@ export default function QuestionCard() {
       setSelectedAnswer(null);
       setIsCorrect(null);
       setCurrentQuestionIndex((prev) => prev + 1);
-    }, 2000);
+    }, 1000);
   };
 
   return (
@@ -113,7 +113,9 @@ export default function QuestionCard() {
               ? difficulty?.charAt(0).toUpperCase() + difficulty.slice(1)
               : ""}
           </p>
-          <p>Question number</p>
+          <p>
+            {currentQuestionIndex + 1} / {results.length}
+          </p>
           <p>Score: {score}</p>
           <Line />
         </InfoText>
