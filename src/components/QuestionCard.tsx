@@ -1,8 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
-import { TriviaData } from "../api";
+import useQuizData from "../hooks/useQuizData";
 import Question from "./Question";
 import QuestionHeader from "./QuestionHeader";
 import StartQuizScreen from "./StartQuizScreen";
@@ -37,11 +36,11 @@ export default function QuestionCard() {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [score, setScore] = useState(0);
 
-  const { data: results, isLoading } = useQuery({
-    queryKey: ["quiz", categoryId, difficulty],
-    queryFn: () => TriviaData(Number(categoryId), difficulty || "medium"),
-    enabled: hasStarted,
-  });
+  const { data: results, isLoading } = useQuizData(
+    categoryId,
+    difficulty || "medium",
+    hasStarted
+  );
 
   const navigate = useNavigate();
 
