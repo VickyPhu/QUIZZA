@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 
 const Container = styled.section`
@@ -12,6 +13,7 @@ const QuestionContainer = styled.div`
   background-color: #f5f5f5;
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin-top: 2rem;
 `;
 
 const InfoText = styled.div`
@@ -63,8 +65,10 @@ const StartButton = styled.button`
   }
 `;
 
+const BackButton = styled(StartButton)``;
+
 interface Props {
-  categoryName: string | null ;
+  categoryName: string | null;
   difficulty: string | null;
   onStart: () => void;
 }
@@ -74,8 +78,10 @@ export default function StartQuizScreen({
   difficulty,
   onStart,
 }: Props) {
+  const navigate = useNavigate();
   return (
     <Container>
+      <BackButton onClick={() => navigate("/")}>Back to Home</BackButton>
       <QuestionContainer>
         <InfoText>
           <p>

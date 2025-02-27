@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
 import { useNavigateOnComplete } from "../hooks/useNavigateOnComplete";
 import useQuizData from "../hooks/useQuizData";
@@ -20,6 +20,26 @@ const QuestionContainer = styled.div`
   background-color: #f5f5f5;
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin-top: 2rem;
+`;
+
+const BackButton = styled.button`
+  border: none;
+  padding-block: 0.6rem;
+  padding-inline: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: #e8cbfd;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #310e6d;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover {
+    transform: scale(1.1);
+    background-color: #daa6ff;
+  }
 `;
 
 function useQueryParams() {
@@ -27,6 +47,7 @@ function useQueryParams() {
 }
 
 export default function QuestionCard() {
+  const navigate = useNavigate();
   const query = useQueryParams();
   const categoryId = Number(query.get("categoryId"));
   const categoryName = query.get("categoryName");
@@ -70,6 +91,7 @@ export default function QuestionCard() {
 
   return (
     <Container>
+      <BackButton onClick={() => navigate("/")}>Back to Home</BackButton>
       <QuestionContainer>
         <QuestionHeader
           categoryName={categoryName}
