@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import styled from "styled-components";
 
 const QuestionText = styled.p`
@@ -5,7 +6,8 @@ const QuestionText = styled.p`
   justify-content: center;
   align-items: center;
   font-size: 1.3rem;
-  padding-bottom: 1.5rem;
+  text-align: center;
+  padding-bottom: 2rem;
 `;
 
 const AnswerButtons = styled.button`
@@ -35,6 +37,13 @@ const ButtonContainer = styled.div`
   gap: 1.5rem;
 `;
 
+const Timer = styled.div`
+  font-size: 1.5rem;
+  color: #a31313;
+  margin-bottom: 1rem;
+  text-align: end;
+`;
+
 interface Props {
   questionData: {
     question: string;
@@ -44,6 +53,7 @@ interface Props {
   handleAnswer: (answer: string) => void;
   selectedAnswer: string | null;
   isCorrect: boolean | null;
+  timeLeft: number;
 }
 
 function decodeHtml(html: string): string {
@@ -57,14 +67,18 @@ export default function Question({
   handleAnswer,
   selectedAnswer,
   isCorrect,
+  timeLeft,
 }: Props) {
-  const shuffledAnswers: string[] = [
-    ...questionData.incorrect_answers,
-    questionData.correct_answer,
-  ].sort(() => Math.random() - 0.5);
+  const shuffledAnswers = useMemo(() => {
+    return [
+      ...questionData.incorrect_answers,
+      questionData.correct_answer,
+    ].sort(() => Math.random() - 0.5);
+  }, [questionData]);
 
   return (
     <div>
+      <Timer>{timeLeft}</Timer>
       <QuestionText>{decodeHtml(questionData.question)}</QuestionText>
       <ButtonContainer>
         {shuffledAnswers.map((answer: string, index: number) => (

@@ -44,6 +44,7 @@ export default function QuestionCard() {
     isCorrect,
     score,
     handleAnswer,
+    timeLeft,
   } = useQuizLogic();
   useNavigateOnComplete(
     currentQuestionIndex,
@@ -85,6 +86,7 @@ export default function QuestionCard() {
             }
             selectedAnswer={selectedAnswer}
             isCorrect={isCorrect}
+            timeLeft={timeLeft}
           />
         )}
       </QuestionContainer>
