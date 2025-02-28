@@ -6,7 +6,9 @@ export default function QuizAppLayout() {
   return (
     <>
       <GlobalStyle />
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
       <Footer />
     </>
   );
