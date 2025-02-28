@@ -63,6 +63,14 @@ export default function ResultPage() {
   const navigate = useNavigate();
   const { score, categoryId, categoryName, difficulty } = location.state || {};
 
+  const getFeedbackMessage = (score: number) => {
+    if (score === 10) return "Wow! You know your stuff! 🎯";
+    if (score >= 8) return "You're good! 💡";
+    if (score >= 5) return "Halfway there, keep it up! 👍🏽";
+    if (score >= 3) return "Better luck next time! 😛";
+    return "Too bad! Give it another shot! 💪🏽";
+  };
+
   // Om ingen data finns (t.ex. om användaren laddar om sidan)
   if (!score || !categoryId || !categoryName || !difficulty) {
     return <p>No results were found. Please play the quiz first.</p>;
@@ -74,6 +82,7 @@ export default function ResultPage() {
         <TextContainer>
           <h2>Quiz Completed! 🎉</h2>
           <p>Your final score: {score} / 10</p>
+          <p>{getFeedbackMessage(score)}</p>
         </TextContainer>
         <ButtonContainer>
           <Button
