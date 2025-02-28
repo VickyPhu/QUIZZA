@@ -12,11 +12,7 @@ export function useNavigateOnComplete(
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Checking navigation condition...");
-    console.log("currentQuestionIndex:", currentQuestionIndex);
-    console.log("results:", results);
     if (results && currentQuestionIndex >= results?.length) {
-        console.log("Navigating to results page...");
       navigate("/results", {
         state: { score, categoryId, categoryName, difficulty },
       });
