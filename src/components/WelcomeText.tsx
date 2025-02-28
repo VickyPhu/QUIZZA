@@ -26,7 +26,7 @@ export default function WelcomeText() {
     <TextContainer>
       <Title>QUIZZA</Title>
       <InfoText>
-        Select a quiz category and difficulty to start playing! You'll answer 10 questions, each with a time limit. The questions will be multiple choice or true and false. Good luck!
+        Select a quiz category and difficulty to start playing! You'll answer 10 questions, each with a time limit. The questions will be multiple choice or true/false. Good luck!
       </InfoText>
     </TextContainer>
   );
